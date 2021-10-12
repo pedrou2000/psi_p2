@@ -80,6 +80,17 @@ WSGI_APPLICATION = 'locallibrary.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {}
+if os.getenv('SQLITE', False):
+    DATABASES['default'] = {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+else:
+    import dj_database_url
+    DATABASES['default'] = dj_database_url.config(
+        default='postgres://alumnodb:alumnodb@localhost:5432/psi', 
+        conn_max_age=500
+    )
 
 #The following environment variable, called DATABASE_URL, has to be defined
 #at the o.s. level: export DATABASE_URL =
